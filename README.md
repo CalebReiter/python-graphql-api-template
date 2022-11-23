@@ -2,10 +2,11 @@
 
 ## Developer Setup
 
-- Install Poetry [insert link here]
+- Install [Poetry](https://python-poetry.org/docs/)
+    - Set poetry config `poetry config virtualenvs.in-project true` to have poetry create virtual env inside project.
     - Preferably use pipx, and pyenv
 - In root directory `poetry install -vv`
-- Activate virtual environment [add instructions for poetry venv in project]
+- Activate virtual environment
     ```bash
     # Linux/Mac
     . .venv\bin\activate
