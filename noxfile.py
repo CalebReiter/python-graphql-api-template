@@ -34,6 +34,18 @@ def tests(session):
     """
     # Pytest command. "python -m pytest -vv --cov={SRC_DIR} --cov-branch --cov-report=html --cov-fail-under=95 tests"
     dependencies = get_dependency_group("test")
+    session.install(".", *dependencies)
+    session.run(
+        "python",
+        "-m",
+        "pytest",
+        "-vv",
+        f"--cov={SRC_DIR}",
+        "--cov-branch",
+        "--cov-report=html",
+        "--cov-fail-under=95",
+        "tests",
+    )
 
 
 @session(python=["3.11"])
