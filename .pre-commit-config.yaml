@@ -1,0 +1,129 @@
+repos:
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        description: "Sort import statements"
+        entry: isort .
+        pass_filenames: false
+        language: python
+        language_version: python3
+        require_serial: true
+        types: [python]
+        stages: [commit]
+        args: ['--profile', 'black', '--filter-files']
+      - id: black
+        name: black
+        description: "Black: The uncompromising Python code formatter"
+        entry: black .
+        pass_filenames: false
+        language: python
+        language_version: python3
+        require_serial: true
+        types: [python]
+        stages: [commit]
+      - id: check-added-large-files
+        name: Check for added large files
+        description: Prevent giant files from being committed
+        entry: check-added-large-files
+        language: python
+        args: ['--maxkb=1000']
+        stages: [commit]
+      - id: check-case-conflict
+        name: Check for case conflicts
+        description: Check for files that would conflict in case-insensitive filesystems
+        entry: check-case-conflict
+        language: python
+        types: [text, executable]
+        stages: [commit]
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+        description: Check for files that contain merge conflict strings.
+        entry: check-merge-conflict
+        language: python
+        types: [text]
+      - id: check-toml
+        name: Check Toml
+        description: This hook checks toml files for parseable syntax.
+        entry: check-toml
+        language: python
+        types: [toml]
+      - id: check-yaml
+        name: Check Yaml
+        description: This hook checks yaml files for parseable syntax.
+        entry: check-yaml
+        language: python
+        types: [yaml]
+        args: ["--allow-multiple-documents"]
+      - id: detect-aws-credentials
+        name: Detect AWS Credentials
+        description: Detects your aws credentials from the aws cli credentials file
+        entry: detect-aws-credentials
+        language: python
+        types: [text]
+        args: ["--allow-missing-credentials"]
+      - id: detect-private-key
+        name: Detect Private Key
+        description: Detects the presence of private keys
+        entry: detect-private-key
+        language: python
+        types: [text]
+      - id: end-of-file-fixer
+        name: Fix End of Files
+        description: Ensures that a file is either empty, or ends with one new line
+        entry: end-of-file-fixer
+        language: python
+        types: [text]
+        stages: [commit]
+      - id: flakeheaven
+        name: flakeheaven
+        entry: flakeheaven lint
+        types: [python]
+        language: python
+        stages: [commit]
+      - id: mypy
+        name: mypy
+        entry: mypy
+        description: Runs mypy
+        pass_filenames: false
+        language: system
+        types: [python]
+        require_serial: true
+        stages: [commit]
+        args: ["--show-error-codes"]
+      - id: name-tests-test
+        name: Tests should end in _test.py
+        description: This verifies that test files are named correctly
+        entry: name-tests-test
+        language: python
+        files: (^|/)tests/src/.+\.py$
+        stages: [commit]
+      - id: no-commit-to-branch
+        name: "Don't commit to branch"
+        entry: no-commit-to-branch
+        language: python
+        pass_filenames: false
+        always_run: true
+      - id: pyupgrade
+        name: pyupgrade
+        description: Automatically upgrade syntax for newer versions.
+        entry: pyupgrade
+        language: system
+        types: [python]
+        args: [--py37-plus]
+      - id: trailing-whitespace
+        name: Trim Trailing Whitespace
+        description: This hook trims trailing whitespace.
+        entry: trailing-whitespace-fixer
+        language: python
+        types: [text]
+        stages: [commit]
+      # Pre-Push stages
+      - id: nox
+        name: Nox
+        description: Run Nox
+        language: system
+        entry: nox
+        args: [-r]
+        pass_filenames: false
+        stages: [push]
