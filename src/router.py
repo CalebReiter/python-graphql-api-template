@@ -1,6 +1,6 @@
 """Router for Officiate.io Backend API."""
 
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 import awsgi
 from flask import Flask, jsonify
@@ -18,16 +18,18 @@ app.config["type_defs"] = type_defs
 
 
 @app.route("/")
-def index() -> Response:
+def index() -> Tuple[Response, int]:
     """Index route.
 
     Returns:
         Response: 200 OK
     """
-    return jsonify(status=200, message="OK")
+    return jsonify(message="OK"), 200
 
 
-def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+def lambda_handler(
+    event: Dict[str, Any], context: Any
+) -> Dict[str, Any]:  # pragma: no cover
     """Handle AWS Lambda Event.
 
     Args:
