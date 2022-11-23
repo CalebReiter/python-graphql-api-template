@@ -1,4 +1,4 @@
-# Officiate.IO.API
+# Generic API
 
 ## Developer Setup
 
