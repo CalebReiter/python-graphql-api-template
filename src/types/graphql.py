@@ -1,8 +1,8 @@
 """GraphQL Types."""
 import re
-from typing import List, Optional, Sequence
+from typing import Any, List, Optional, Sequence, Tuple
 
-from graphql.language import FieldNode
+from graphql.language import FieldNode, SelectionNode
 from graphql.type import GraphQLResolveInfo
 
 from src.types.errors import GraphQLUtilsErrorMessages
@@ -50,6 +50,11 @@ class GraphQLUtils:
                     value = value.replace(acronym, replacement)
         return re.sub(r"(?<!^)(?=[A-Z])", "_", value).lower()
 
+    def _get_node_selections(self, field_node: Any, field: str) -> Optional[List[Any]]:
+        if field_node.name.value == field and field_node.selection_set is not None:
+            return list(field_node.selection_set.selections)
+        return None
+
     def get_projection(
         self, path: str | List[str], *, separator: str = "."
     ) -> List[str]:
@@ -69,16 +74,14 @@ class GraphQLUtils:
             raise ValueError(GraphQLUtilsErrorMessages.CANNOT_GET_PROJECTION)
         if isinstance(path, str):
             path = path.split(separator)
-        nodes: Sequence[FieldNode] = self.info.field_nodes
+        nodes = self.info.field_nodes
         for index, field in enumerate(path):
             found = False
             for field_node in nodes:
-                if (
-                    field_node.name.value == field
-                    and field_node.selection_set is not None
-                ):
+                selections = self._get_node_selections(field_node, field)
+                if selections is not None:
                     found = True
-                    nodes = list(*field_node.selection_set.selections)
+                    nodes = selections
                     break
             if not found:
                 raise ValueError(
