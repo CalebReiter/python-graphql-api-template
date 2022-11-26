@@ -1,9 +1,9 @@
 import pytest
-
+from src.types.errors import FlaskErrorMessages
 
 def test_can_http_get_graphql(client):
     response = client.get("/graphql")
-    assert response.json["error"]["message"] == "NOT FOUND"
+    assert response.json["error"]["message"] == FlaskErrorMessages.NOT_FOUND
     assert response.status == "404 NOT FOUND"
 
 

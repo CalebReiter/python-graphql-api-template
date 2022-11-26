@@ -8,7 +8,7 @@ from flask import Blueprint, current_app, jsonify, request
 from flask.wrappers import Response
 
 from src._graphql.schema import schema
-from src.types.errors import ErrorResponse
+from src.types.errors import ErrorResponse, FlaskErrorMessages
 
 graphql = Blueprint("graphql", __name__)
 
@@ -25,7 +25,7 @@ def graphql_playground() -> Tuple[str, int]:
     """
     if current_app.debug:
         return PLAYGROUND_HTML, 200
-    raise ErrorResponse("NOT FOUND", status_code=404)
+    raise ErrorResponse(FlaskErrorMessages.NOT_FOUND, status_code=404)
 
 
 @graphql.route("/graphql", methods=["POST"])

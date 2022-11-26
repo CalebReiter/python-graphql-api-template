@@ -1,6 +1,7 @@
 """Error Types."""
 
-from typing import Any, Dict, Optional
+import re
+from typing import Any, Dict, List, Optional
 
 
 class ErrorResponse(Exception):
@@ -31,3 +32,30 @@ class ErrorResponse(Exception):
             Dict[str, Any]: error as dictionary
         """
         return {**dict(self.payload or {}), "message": self.message}
+
+
+class ErrorMessages:
+    """Contain error messages."""
+
+    @classmethod
+    def escaped_message(cls, message: str, *args: List[Any]) -> str:  # pragma: no cover
+        """Get error message and escape it.
+        
+        Args:
+            message (str): error message to get
+            args (List[Any]): arguments to pass to error message if it is callable
+        
+        Returns:
+            str: escaped error message
+        """
+        error_message = getattr(cls, message)
+        if callable(error_message):
+            error_message = error_message(*args)
+        return re.escape(error_message)
+
+
+class FlaskErrorMessages(ErrorMessages):
+    """Contain error messages for Flask."""
+
+    NOT_FOUND = "NOT FOUND"
+
