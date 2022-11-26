@@ -40,11 +40,11 @@ class ErrorMessages:
     @classmethod
     def escaped_message(cls, message: str, *args: List[Any]) -> str:  # pragma: no cover
         """Get error message and escape it.
-        
+
         Args:
             message (str): error message to get
             args (List[Any]): arguments to pass to error message if it is callable
-        
+
         Returns:
             str: escaped error message
         """
@@ -59,3 +59,23 @@ class FlaskErrorMessages(ErrorMessages):
 
     NOT_FOUND = "NOT FOUND"
 
+
+class GraphQLUtilsErrorMessages(ErrorMessages):
+    """Contain error messages for the GraphQLUtils class."""
+
+    CANNOT_GET_PROJECTION = "Cannot get projection, GraphQLResolverInfo is None."
+
+    @staticmethod
+    def projection_not_found(
+        missing_path: str | List[str], full_path: str | List[str]
+    ) -> str:
+        """Error message when GraphQLUtils.get_projection is unable to find the provided path.
+
+        Args:
+            missing_path (str | List[str]): part of the path that was not found
+            full_path (str | List[str]): full path that was being searched
+
+        Returns:
+            str: formatted error message
+        """
+        return f"Could not find {missing_path} when searching for projection on {full_path}."

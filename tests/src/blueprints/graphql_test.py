@@ -1,5 +1,7 @@
 import pytest
+
 from src.types.errors import FlaskErrorMessages
+
 
 def test_can_http_get_graphql(client):
     response = client.get("/graphql")
