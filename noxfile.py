@@ -56,7 +56,8 @@ def mypy(session):
         session: Nox Session.
     """
     dependencies = get_dependency_group("mypy")
-    session.install(*dependencies)
+    # need to install project to get types from dependencies
+    session.install(".", *dependencies)
     # poetry add lxml required
     # mypy command: mypy --html-report mypy-report --txt-report mypy-report --show-error-codes
     session.run("mypy", "--show-error-codes")
